@@ -1,0 +1,19 @@
+{
+  "name": "bottle.proto",
+  "version": "0.0.1",
+  "authors": [
+    "marshal.wu@qq.com"
+  ],
+  "license": "MIT",
+  "homepage": "blog.shiqichan.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
+}
