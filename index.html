@@ -2,65 +2,243 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0,width=device-width,user-scalable=no">
+
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/prefixfree/prefixfree.min.js"></script>
+  <script type="text/javascript" src="bower_components/jQueryKeyframes/jquery.keyframes.min.js"></script>
+
   <style type="text/css">
   	.bottle{
-  		max-height:120px;
+  		max-height:200px;
+  		position: absolute;
   	}
 
-  	.animated {
-	  -webkit-animation-duration: 5s;
-	  -webkit-animation-fill-mode: both;
+	html,body { 
+		height: 100%; margin: 0px; padding: 0px; 
+		background-image: url(images/background.png);
+		-webkit-background-size: 100% 100%;
 	}
 
-	@-webkit-keyframes bounce {
-	  0%, 20%, 53%, 80%, 100% {
-	    -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-	    -webkit-transform: translate3d(0,0,0);
-	  }
-
-	  40%, 43% {
-	    -webkit-transition-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
-	    -webkit-transform: translate3d(0, -30px, 0);
-	  }
-
-	  70% {
-	    -webkit-transition-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
-	    -webkit-transform: translate3d(0, -15px, 0);
-	  }
-
-	  90% {
-	    -webkit-transform: translate3d(0,-4px,0);
-	  }
-	}
-
-	.bounce {
-	  -webkit-animation-name: bounce;
-	  -webkit-transform-origin: center bottom;
-	}
-
-	@-webkit-keyframes down {
-		0%{
-			-webkit-transform: translate3d(0, -200px, 0);
-		}
-
-	  	50%{
-	  		opacity: 1;
-	  	}
-
-		100% {
-		    opacity: 0;
-		    -webkit-transform: translate3d(0, 2000px, 0);
-		}
-	}
-
-	.down {
-		-webkit-animation-name: down;
-  		animation-name: down;
+	img{
+		margin: 0px;
 	}
 
   </style>
 </head>
 <body>
-	<img class='bottle animated down' src='images/001.png'> 
+	<script type="text/javascript">
+
+		var targetHeight=100;
+		var targetWidth=30;
+
+		var width=$(document.body).width();
+		var unitWidth=width/4/2;
+
+		var height=$(document.body).height();
+
+		Array.prototype.removeByVal = function(val) {
+		    for (var i = 0; i < this.length; i++) {
+		        if (this[i] === val) {
+		            this.splice(i, 1);
+		            i--;
+		        }
+		    }
+		    return this;
+		}
+
+		console.log('>>>>startX: '+(unitWidth-targetWidth/2));
+		console.log('>>>>endX: '+(unitWidth-targetWidth/2));
+
+		$.keyframe.define([{
+				name:'down0',
+				'0%':{
+					'transform':'translate3d('+(unitWidth-targetWidth/2)+'px, -'+targetHeight+'px, 0)'
+				},
+				'50%':{
+					'opacity':1
+				},
+				'90%':{
+					'opacity':1
+				},
+				'100%':{
+					'opacity':0,
+					'transform':'translate3d('+(unitWidth-targetWidth/2)+'px, '+(height+targetHeight)+'px, 0)'
+				}
+			},{
+				name:'down1',
+				'0%':{
+					'transform':'translate3d('+(unitWidth+unitWidth*2-targetWidth/2)+'px, -'+targetHeight+'px, 0)'
+				},
+				'50%':{
+					'opacity':1
+				},
+				'90%':{
+					'opacity':1
+				},
+				'100%':{
+					'opacity':0,
+					'transform':'translate3d('+(unitWidth+unitWidth*2-targetWidth/2)+'px, '+(height+targetHeight)+'px, 0)'
+				}
+			},{
+				name:'down2',
+				'0%':{
+					'transform':'translate3d('+(unitWidth+unitWidth*4-targetWidth/2)+'px, -'+targetHeight+'px, 0)'
+				},
+				'50%':{
+					'opacity':1
+				},
+				'90%':{
+					'opacity':1
+				},
+				'100%':{
+					'opacity':0,
+					'transform':'translate3d('+(unitWidth+unitWidth*4-targetWidth/2)+'px, '+(height+targetHeight)+'px, 0)'
+				}
+			},{
+				name:'down3',
+				'0%':{
+					'transform':'translate3d('+(unitWidth+unitWidth*6-targetWidth/2)+'px, -'+targetHeight+'px, 0)'
+				},
+				'50%':{
+					'opacity':1
+				},
+				'90%':{
+					'opacity':1
+				},
+				'100%':{
+					'opacity':0,
+					'transform':'translate3d('+(unitWidth+unitWidth*6-targetWidth/2)+'px, '+(height+targetHeight)+'px, 0)'
+				}
+			},{
+				name:'bounce',
+				'0%, 20%, 53%, 80%, 100%':{
+					'transition-timing-function': 'cubic-bezier(0.215, 0.610, 0.355, 1.000)',
+					'transform':'translate3d(-10px,0,0)'
+				}
+				,
+				'40%, 43%':{
+					'transition-timing-function':'cubic-bezier(0.755, 0.050, 0.855, 0.060)',
+					transform:'translate3d(-10px, -30px, 0)'
+				},
+				'70%':{
+					'transition-timing-function':'cubic-bezier(0.755, 0.050, 0.855, 0.060)',
+					transform:'translate3d(-10px, -15px, 0)'
+				},
+				'90%':{
+					transform:'translate3d(-10px,-4px,0)'
+				}
+			}]);
+
+		$(document).ready(function(){
+			
+			var duration=3000;
+			// var duration=5000;
+			var currentAnimElements=[];
+
+			function playDownAnim(element,columnIndex){
+				$(element).appendTo($('body'));
+
+				$(element).playKeyframe({
+					name:'down'+columnIndex,
+					duration: duration,
+	            	timingFunction: 'ease-in',
+	            	fillMode:'forwards'
+				},function(){
+					// setTimeout(function(){
+						$(element).remove();
+						currentAnimElements.removeByVal(element);
+					// },1000);
+				});
+
+				currentAnimElements.push(element);
+
+				if(duration>=100){
+					duration-=20;	
+				}
+				
+			}
+
+			var isTimeout=false;
+
+			var timeout=setTimeout(function(){
+				console.log('time out');
+				isTimeout=true;
+
+				for(var i in currentAnimElements){
+					$(currentAnimElements[i]).pauseKeyframe();
+				}
+
+			},20000);
+
+
+			var currentIndex=-1;
+
+			var interval=setInterval(function(){
+				if(isTimeout){
+					return;
+				}
+
+				var imgIndex=Math.floor(Math.random()*3+1);
+				var img=$('<img class="bottle animated down" src="images/00'+imgIndex+'.png">');
+				$(img).one('click',function(){
+					var isPlayAnim=false;
+					currentAnimElements.removeByVal(img);
+
+					var style = window.getComputedStyle($(img).get(0));  // Need the DOM object
+					var matrix = new WebKitCSSMatrix(style.webkitTransform);
+					var position={
+						x:matrix.e+10,//为什么是10？
+						y:matrix.f
+					}
+
+					console.log(position);
+					$(img).hide();
+					
+					setTimeout(function(){
+						$(img).resetKeyframe(function(){
+
+						$(img).css({
+							position:  'absolute',
+							top: position.y+'px',
+							left: position.x+'px'
+						});
+
+						
+						$(img).show();
+
+						// setTimeout(function(){
+
+							if(!isPlayAnim){
+								$(img).playKeyframe({
+									name:'bounce',
+									duration:300
+								},function(){
+									$(img).hide();
+									setTimeout(function(){
+										$(img).remove();
+										currentAnimElements.removeByVal(img);
+									},0);
+								});
+								isPlayAnim=true;
+							}
+							
+						// },0);
+					});
+					},10);
+					
+				});
+				var columnIndex=Math.floor(Math.random()*4);
+				while(currentIndex==columnIndex){
+					columnIndex=Math.floor(Math.random()*4);
+				}
+				currentIndex=columnIndex;
+				playDownAnim(img,columnIndex);
+
+			},1000);
+			
+		});
+
+	</script>
 </body>
 </html> 
