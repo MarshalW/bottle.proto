@@ -7,11 +7,11 @@ bottle.proto
 
 需要安装bower，用它来为项目安装依赖的库，比如jquery。
 
-  npm install -g bower
+```npm install -g bower```
 
 然后，在根目录下执行：
 
-  bower install
+```bower install```
 
 这样，网页就可以正常运行了。
 
